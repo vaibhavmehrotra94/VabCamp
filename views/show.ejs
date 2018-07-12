@@ -1,0 +1,14 @@
+<% include partials/head %>
+
+<div>
+    <h2><%= camp.name %></h2>
+    <img src="<%=camp.image%>">
+    <p><%- camp.content %></p>
+    <% camp.comments.forEach(function(comment){ %>
+    <p>
+        <strong><%= comment.author %></strong> - <%= comment.text %>
+    </p>
+    <% }); %>
+</div>
+
+<% include partials/foot %>

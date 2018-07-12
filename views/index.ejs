@@ -12,13 +12,16 @@
     </header>
     
     <div class="row text-center" style="display:flex; flex-wrap:wrap;">
-        <% location.forEach(function(x){ %>
+        <% location.forEach(function(camp){ %>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
-                    <img src="<%= x.image %>">
+                    <img src="<%= camp.image %>">
                     <div class="caption">
-                        <h4><%= x.name %></h4>
+                        <h4><%= camp.name %></h4>
                     </div>
+                    <p>
+                        <a href="/campgrounds/<%= camp._id %>" class="btn btn-primary">More Info</a>
+                    </p>
                 </div>
             </div>
         <% }); %>

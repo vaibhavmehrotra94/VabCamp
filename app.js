@@ -1,57 +1,50 @@
-var express = require('express');
-// var request = require('request');
-var app = express();
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost/yelp_camp");
+var express     = require('express'),
+    app         = express(),
+    bodyParser  = require('body-parser'),
+    mongoose    = require('mongoose'),
+    campGround  = require("./models/campground"),
+    comment     = require("./models/comment"),
+    seedDB      = require("./seeds");
 
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String
-});
+mongoose.connect("mongodb://localhost/vab_camp");
 
-var campGround = mongoose.model("campground", campgroundSchema);
-
-
-// var location = [{name:"Location-1", image:"https://www.melrimbagarden.com/sites/default/files/images/DSC04388.JPG"},
-//                 {name:"Location-2", image:"https://media-cdn.tripadvisor.com/media/photo-s/01/87/c4/7d/elkwood-camp-ground.jpg"},
-//                 {name:"Location-3", image:"http://www.visitvictoria.com/-/media/images/high-country/things-to-do/outdoor-activities/camping-falls-to-hotham-alpine-crossing_hc_r_1461477_1150x863.jpg?ts=20151020370426&amp;cp=95&w=480&h=360&crop=1"},
-//                 {name:"Location-4", image:"https://www.melrimbagarden.com/sites/default/files/images/DSC04388.JPG"},
-//                 {name:"Location-5", image:"https://media-cdn.tripadvisor.com/media/photo-s/01/87/c4/7d/elkwood-camp-ground.jpg"},
-//                 {name:"Location-6", image:"http://www.visitvictoria.com/-/media/images/high-country/things-to-do/outdoor-activities/camping-falls-to-hotham-alpine-crossing_hc_r_1461477_1150x863.jpg?ts=20151020370426&amp;cp=95&w=480&h=360&crop=1"},
-//                 {name:"Location-7", image:"https://www.melrimbagarden.com/sites/default/files/images/DSC04388.JPG"},
-//                 {name:"Location-8", image:"https://media-cdn.tripadvisor.com/media/photo-s/01/87/c4/7d/elkwood-camp-ground.jpg"},
-//                 {name:"Location-9", image:"http://www.visitvictoria.com/-/media/images/high-country/things-to-do/outdoor-activities/camping-falls-to-hotham-alpine-crossing_hc_r_1461477_1150x863.jpg?ts=20151020370426&amp;cp=95&w=480&h=360&crop=1"},
-//                 {name:"Location-10", image:"https://www.melrimbagarden.com/sites/default/files/images/DSC04388.JPG"},
-//                 {name:"Location-11", image:"https://media-cdn.tripadvisor.com/media/photo-s/01/87/c4/7d/elkwood-camp-ground.jpg"},
-//                 {name:"Location-12", image:"http://www.visitvictoria.com/-/media/images/high-country/things-to-do/outdoor-activities/camping-falls-to-hotham-alpine-crossing_hc_r_1461477_1150x863.jpg?ts=20151020370426&amp;cp=95&w=480&h=360&crop=1"}];
-                    
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
+seedDB();
 
+
+// --------------------------------------------------------Routes
 app.get("/",function(req, res) {
     res.render('home');
 });
 
-
+// -------------------------------------------------View all Campgrounds
 app.get("/campgrounds",function(req, res) {
     campGround.find({}, function(err, camp){
         if(err){
             console.log(err);
         }else{
-            res.render('campgrounds',{location: camp});
+            res.render('index',{location: camp});
         }
     });
-    
 });
 
+
+// ------------------------------------------------Add Campround Form Page
+app.get("/campgrounds/new",function(req,res){
+    res.render("addcampground");
+});
+
+
+// --------------------------------------------------Post Campground
 app.post("/campgrounds",function(req,res){
-    var name = req.body.name;
-    var image = req.body.image;
-    var newCampLocation = {name: name, image: image};
+    var name    = req.body.name,
+        image   = req.body.image,
+        content = req.body.content;
+    var newCampLocation = {name: name, image: image, content: content };
     
     campGround.create(newCampLocation, function(err, campgrounds){
         if(err){
@@ -64,9 +57,26 @@ app.post("/campgrounds",function(req,res){
     });
 });
 
-app.get("/campgrounds/new",function(req,res){
-    res.render("addcampground");
+// -----------------------------------------------Show details page
+app.get("/campgrounds/:id", function(req, res) {
+   campGround.findById(req.params.id).populate("comments").exec(function(err, camp){
+       if(err){
+           console.log(err);
+       } else{
+           console.log(camp);
+           res.render("show", {camp: camp});
+       }
+   }); 
 });
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,17 +1,17 @@
 {
-  "name": "v1",
-  "version": "1.0.0",
-  "description": "yelpCamp v1",
+  "name": "YelpCamp",
+  "version": "1.4.0",
+  "description": "vabCamp",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "vab",
+  "author": "Vaibhav Mehrotra",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
-    "mongoose": "^5.0.9",
-    "request": "^2.83.0"
+    "mongoose": "^5.0.9"
   }
 }

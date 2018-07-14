@@ -1,7 +1,7 @@
 {
-  "name": "YelpCamp",
+  "name": "VabCamp",
   "version": "1.4.0",
-  "description": "vabCamp",
+  "description": "VabCamp",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +12,6 @@
     "body-parser": "^1.18.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
-    "mongoose": "^5.0.9"
+    "mongoose": "^5.0.9",
   }
 }

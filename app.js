@@ -18,8 +18,11 @@ seedDB();
 
 // --------------------------------------------------------Routes
 app.get("/",function(req, res) {
-    res.render('home');
+    res.redirect('/campgrounds');
 });
+
+// **********************************************FOR CAMPGROUNDS
+// *************************************************************
 
 // -------------------------------------------------View all Campgrounds
 app.get("/campgrounds",function(req, res) {
@@ -27,7 +30,7 @@ app.get("/campgrounds",function(req, res) {
         if(err){
             console.log(err);
         }else{
-            res.render('index',{location: camp});
+            res.render('campground/index',{location: camp});
         }
     });
 });
@@ -35,7 +38,7 @@ app.get("/campgrounds",function(req, res) {
 
 // ------------------------------------------------Add Campround Form Page
 app.get("/campgrounds/new",function(req,res){
-    res.render("addcampground");
+    res.render("campground/new");
 });
 
 
@@ -64,15 +67,42 @@ app.get("/campgrounds/:id", function(req, res) {
            console.log(err);
        } else{
            console.log(camp);
-           res.render("show", {camp: camp});
+           res.render("campground/show", {camp: camp});
        }
    }); 
 });
 
+// *************************************************FOR Comments
+// *************************************************************
 
 
+app.get("/campgrounds/:id/comments/new", function(req, res){
+    campGround.findById(req.params.id, function(err, camp){
+        if(err){
+            console.log(err);
+        } else{
+            res.render("comment/new", {camp: camp});
+        }
+    });
+});
 
-
+app.post("/campgrounds/:id/comments", function(req,res){
+    campGround.findById(req.params.id, function(err, camp) {
+        if(err){
+            console.log(err);
+        } else{
+            comment.create(req.body.comment, function(err, comment){
+                if(err){
+                    console.log(err);
+                } else{
+                    camp.comments.push(comment);
+                    camp.save();
+                }
+            });
+        }
+        res.redirect("/campgrounds/"+ req.params.id);
+    });
+})
 
 
 
@@ -83,7 +113,7 @@ app.get("/campgrounds/:id", function(req, res) {
 
 
 app.get("*",function(req,res){
-   res.send("Sorry! Try a valid address."); 
+  res.send("Sorry! Try a valid address."); 
 });
 
 

@@ -1,0 +1,23 @@
+.thumbnail img{
+    width : 100%;
+}
+
+.thumbnail{
+    padding: 0;
+}
+
+.userCase{
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+
+.navbar-brand{
+ padding: 0.5em;
+ padding-left: 1.8em;
+}
+
+#logo{
+    display: inline;
+    max-height: 100% ;
+}

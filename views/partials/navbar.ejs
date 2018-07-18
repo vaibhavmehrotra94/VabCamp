@@ -8,15 +8,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">YelpCamp</a>
+      <a class="navbar-brand" href="/campgrounds">VabCamp</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">LogIn</a></li>
-        <li><a href="#">SignUp</a></li>
-        <li><a href="#">LogOut</a></li>
+        <% if(!thisUser){ %>
+          <li><a href="/login">LogIn</a></li>
+          <li><a href="/register">SignUp</a></li>
+        <% }else{ %>
+          <li><a>Hi, <strong class = "userCase"><%= thisUser.username %></strong></a></li>
+          <li><a href="/logout">LogOut</a></li>
+        <% } %>
      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

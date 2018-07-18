@@ -1,7 +1,7 @@
 {
   "name": "VabCamp",
-  "version": "1.4.0",
-  "description": "VabCamp",
+  "version": "2.0.0",
+  "description": "A Camp related website which is still in development phase.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +12,11 @@
     "body-parser": "^1.18.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "method-override": "^3.0.0",
     "mongoose": "^5.0.9",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^5.0.1"
   }
 }

@@ -1,120 +1,83 @@
-var express     = require('express'),
-    app         = express(),
-    bodyParser  = require('body-parser'),
-    mongoose    = require('mongoose'),
-    campGround  = require("./models/campground"),
-    comment     = require("./models/comment"),
-    seedDB      = require("./seeds");
+"use strict";
+// For general environment
+var express         = require('express'),
+    app             = express(),
+    bodyParser      = require('body-parser'),
+    mongoose        = require('mongoose'),
+    methodOverride  = require('method-override');
 
-mongoose.connect("mongodb://localhost/vab_camp");
+// for user authentication & session
+var passport                = require("passport"), //for saving and retrieving auth data using some strategy
+    localStrategy           = require("passport-local"), //strategy that uses local data for auth i.e. username & pass.
+    passportLocalMongoose   = require("passport-local-mongoose"), //plugging methods in schema to work with passport 
+    expressSession          = require("express-session");
 
+// Schemas 
+var CampGround  = require("./models/campground"),
+    Comment     = require("./models/comment"),
+    User        = require("./models/user");
 
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static("public"));
-
-seedDB();
-
-
-// --------------------------------------------------------Routes
-app.get("/",function(req, res) {
-    res.redirect('/campgrounds');
-});
-
-// **********************************************FOR CAMPGROUNDS
-// *************************************************************
-
-// -------------------------------------------------View all Campgrounds
-app.get("/campgrounds",function(req, res) {
-    campGround.find({}, function(err, camp){
-        if(err){
-            console.log(err);
-        }else{
-            res.render('campground/index',{location: camp});
-        }
-    });
-});
-
-
-// ------------------------------------------------Add Campround Form Page
-app.get("/campgrounds/new",function(req,res){
-    res.render("campground/new");
-});
-
-
-// --------------------------------------------------Post Campground
-app.post("/campgrounds",function(req,res){
-    var name    = req.body.name,
-        image   = req.body.image,
-        content = req.body.content;
-    var newCampLocation = {name: name, image: image, content: content };
+// Routes
+var campGroundRoute = require("./routes/campground"),
+    commentRoute    = require("./routes/comment"),
+    authRoute       = require("./routes/index");
     
-    campGround.create(newCampLocation, function(err, campgrounds){
-        if(err){
-            console.log("ERROR!!");
-            console.log(err);
-        }else{
-            console.log(campgrounds);
-            res.redirect("/campgrounds");
-        }
-    });
+// Including Seeds file 
+var seedDB = require("./seeds");
+    
+// Strategy describes the data you will use for auth.(ex. fb, google+, local, twitter) for signUp & logIn. 
+
+
+mongoose.connect("mongodb://localhost/vab_camp_v8"/*, { useNewUrlParser: true }*/);
+
+// =================================
+// Setting up the express Environment
+// ==================================
+app.set("view engine", "ejs"); //what files to look for html data
+app.use(bodyParser.urlencoded({extended:true})); //true(complex Algo) for parsing all data types, false just for string/array
+app.use(express.static(__dirname + "/public"));//for describing where the static files are present.
+app.use(methodOverride("__method")); //for enabling PUT and DELETE methods.
+
+
+// ======================
+// PASSPORT CONFIGURATION
+// ======================
+app.use(expressSession({
+    secret: "I really want to eat something tasty right now.",
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Intializing Passport
+// --------------------
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Setting up Passport
+// -------------------
+passport.use(new localStrategy(User.authenticate())); //.authenticate() is provided by pass-loc-mongoose
+passport.serializeUser(User.serializeUser()); //.serializeUser() -> pass-loc-mongoose (for decoding)
+passport.deserializeUser(User.deserializeUser()); //.deserializeUser() -> pass-loc-mongoose (for encoding)
+
+// Seeding the DataBase
+// --------------------
+// seedDB();
+
+// MiddleWare for Passing thisUser to all Routes
+// ---------------------------------------------
+
+app.use(function(req, res, next){
+    res.locals.thisUser = req.user;
+    next();
 });
 
-// -----------------------------------------------Show details page
-app.get("/campgrounds/:id", function(req, res) {
-   campGround.findById(req.params.id).populate("comments").exec(function(err, camp){
-       if(err){
-           console.log(err);
-       } else{
-           console.log(camp);
-           res.render("campground/show", {camp: camp});
-       }
-   }); 
-});
+// =========================
+// Including the Route Files
+// =========================
 
-// *************************************************FOR Comments
-// *************************************************************
+app.use("/",authRoute);
+app.use("/campgrounds",campGroundRoute);
+app.use("/campgrounds/:id/comments",commentRoute);
 
-
-app.get("/campgrounds/:id/comments/new", function(req, res){
-    campGround.findById(req.params.id, function(err, camp){
-        if(err){
-            console.log(err);
-        } else{
-            res.render("comment/new", {camp: camp});
-        }
-    });
-});
-
-app.post("/campgrounds/:id/comments", function(req,res){
-    campGround.findById(req.params.id, function(err, camp) {
-        if(err){
-            console.log(err);
-        } else{
-            comment.create(req.body.comment, function(err, comment){
-                if(err){
-                    console.log(err);
-                } else{
-                    camp.comments.push(comment);
-                    camp.save();
-                }
-            });
-        }
-        res.redirect("/campgrounds/"+ req.params.id);
-    });
-})
-
-
-
-
-
-
-
-
-
-app.get("*",function(req,res){
-  res.send("Sorry! Try a valid address."); 
-});
-
-
+// ******************************************
 app.listen(process.env.PORT, process.env.IP);

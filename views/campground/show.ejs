@@ -1,17 +1,63 @@
 <% include ../partials/head %>
 
-<div>
-    <h2><%= camp.name %></h2>
-    <img src="<%=camp.image%>">
-    <p><%- camp.content %></p>
-    <p>
-        <a class="btn btn-primary" href="/campgrounds/<%= camp._id %>/comments/new">Add Comment</a>
-    </p>
-    <% camp.comments.forEach(function(comment){ %>
-    <p>
-        <strong><%= comment.author %></strong> - <%= comment.text %>
-    </p>
-    <% }); %>
+<div class ="container">
+    <div class="row">
+        <div class="col col-md-3">
+            <p class="lead">VabCamp</p>
+            <div class="list-group">
+                <li class="list-group-item active">Cras justo odio 1</li>
+                <li class="list-group-item">Cras justo odio 2</li>
+                <li class="list-group-item">Cras justo odio 3</li>
+            </div>
+        </div>
+        <div class="col col-md-9">
+            <!--Thumbnail-->
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%=camp.image%>">
+                <div class="caption">
+                    
+                    <h4 class="pull-right">900 Rs/Night</h4>
+                    <h4>
+                        <a href="">
+                            <%= camp.name %>
+                        </a>
+                    </h4>
+                    <p>
+                        <em>Submitted By - 
+                            <span class="text-capitalize"><%= camp.author.username %></span>
+                        </em>
+                    </p>
+                    <p><%- camp.content %></p>
+                    <div>
+                        <a class="btn btn-warning" href="/campgrounds/<%= camp._id %>/edit">Edit</a>
+                        <form method="POST" action="/campgrounds/<%=camp._id%>?__method=DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+    
+                </div>
+            </div><!--Thumbnail ends-->
+            
+            <!--Comment Section-->
+            <div class = "well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/campgrounds/<%= camp._id %>/comments/new">Add Comment</a>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <% camp.comments.forEach(function(comment){ %>
+                            <strong class="userCase"><%= comment.author.username %></strong>
+                            <span class="pull-right">10 Days Ago</span>
+                            <p><%= comment.text %></p>
+                        <% }); %>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>
 
 <% include ../partials/foot %>

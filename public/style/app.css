@@ -1,3 +1,6 @@
+body{
+    min-height:100%;
+}
 .thumbnail img{
     width : 100%;
 }
@@ -11,13 +14,34 @@
     font-weight: bold;
 }
 
+.generic-form{
+    width:50%;
+    margin:30px auto;
+}
 
-.navbar-brand{
- padding: 0.5em;
- padding-left: 1.8em;
+.delete-comment{
+    background-color: transparent;
+    border:none;
+    color:#337ab7;
+    -webkit-appearance: none;
+}
+
+.delete-comment:hover{
+    background-color: transparent;
+    border:none;
+    color:rgb(0, 75, 145);
+    -webkit-appearance: none;
+}
+
+#delete-form{
+    display: inline;
 }
 
 #logo{
     display: inline;
     max-height: 100% ;
+}
+
+#comment-author{
+    margin-right: 10px;
 }

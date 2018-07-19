@@ -1,11 +1,22 @@
 <% include ../partials/head %>
 
-<h1>REGISTER HERE</h1>
-
-<form action="/register" method="POST">
-    <input type="text" name="username" placeholder="User Name"><br>
-    <input type="password" name="password" placeholder="Password"><br>
-    <button type="submit">Sign Up</button>
-</form>
-
+<div class="container ">
+    <div class="row">    
+        <h1><center>Registration Form<center></h1>
+        <div class="generic-form">    
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="username" placeholder="User Name">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-lg btn-block">SignUp</button>
+                </div>
+                <a href="/campgrounds">Go Back</a>
+            </form>
+        </div>
+    </div>
+</div>
 <% include ../partials/foot %>

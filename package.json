@@ -1,7 +1,7 @@
 {
   "name": "VabCamp",
-  "version": "2.0.0",
-  "description": "A Camp related website which is still in development phase.",
+  "version": "2.3.0",
+  "description": "A Camp related website",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",

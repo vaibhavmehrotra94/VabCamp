@@ -7,7 +7,7 @@ var express     = require("express"),
 // Index Route
 // -----------
 router.get("/",function(req, res) {
-    res.render('home');
+    res.render('landing');
 });
 
 
@@ -28,9 +28,11 @@ router.post("/register", function(req, res){
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);
+            req.flash("error", err.message);
             return res.redirect("/register");
         }
         passport.authenticate("local")(req, res, function(){
+            req.flash("success", "Yahoo! Welcome to our family. ");
             res.redirect("/campgrounds");
         });
     });
@@ -48,13 +50,15 @@ router.get("/login", function(req, res){
 router.post("/login", passport.authenticate("local", {
     successRedirect:    "/campgrounds",
     failureRedirect:    "/login"
-}),function(req, res){});
+}),function(req, res){
+});
 
 
 // Handling LogOut
 // ---------------
 router.get("/logout", function(req, res){
     req.logout();
+    req.flash("success", "See you soon!");
     res.redirect("/campgrounds");
 });
 

@@ -2,11 +2,12 @@
 var express     = require("express"),
     router      = express.Router({mergeParams: true} ),
     CampGround  = require("../models/campground"),
-    Comment     = require("../models/comment");
+    Comment     = require("../models/comment"),
+    middleWare  = require("../middleware");
 
 // New Comment Form
 // ----------------
-router.get("/new", isLoggedIn, function(req, res){
+router.get("/new", middleWare.isLoggedIn, function(req, res){
     CampGround.findById(req.params.id, function(err, camp){
         if(err){
             console.log(err);
@@ -18,7 +19,7 @@ router.get("/new", isLoggedIn, function(req, res){
 
 // Handling the New Comment
 // ------------------------
-router.post("/", isLoggedIn, function(req,res){
+router.post("/", middleWare.isLoggedIn, function(req,res){
     CampGround.findById(req.params.id, function(err, camp) {
         if(err){
             console.log(err);
@@ -35,22 +36,53 @@ router.post("/", isLoggedIn, function(req,res){
                 }
             });
         }
+        req.flash("success", "Yeah! Comment Added.")
         res.redirect("/campgrounds/"+ req.params.id);
     });
 });
 
+// Editing the comment
+// -------------------
+router.get("/:c_id/edit", middleWare.checkCommentOwnership, function(req, res){
+    CampGround.findById(req.params.id, function(err, camp){
+        if(err){
+            console.log(err);
+        } else{
+            Comment.findById(req.params.c_id, function(err, comment){
+                if(err){
+                    console.log(err);
+                    res.redirect("back");
+                } else{
+                    res.render("comment/edit", {camp: camp, comment: comment});
+                }
+            });            
+        }
+    });
+});
 
-// =========
-// FUNCTIONS
-// =========
+// Handling the edited comment
+// ---------------------------
+router.put("/:c_id", middleWare.checkCommentOwnership, function(req, res){
+    Comment.findByIdAndUpdate(req.params.c_id, req.body.comment, function(err, comment){
+        if(err){
+            console.log(err);
+        }
+        req.flash("success", "Yeah! Comment Successfully Edited .")
+        res.redirect("/campgrounds/"+ req.params.id);
+    });
+});
 
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        // For not allowing cache(for previous page)
-        res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-        return next();
-    }
-    res.redirect("/login");
-}
+// Deleting Comment
+// ----------------
+router.delete("/:c_id", middleWare.checkCommentOwnership, function(req, res){
+    Comment.findByIdAndRemove(req.params.c_id, function(err){
+        if(err){
+            console.log(err);
+        }
+        req.flash("success", "Comment Deleted Successfully.")
+        res.redirect("/campgrounds/" + req.params.id);
+    });
+});
+
 
 module.exports = router;

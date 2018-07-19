@@ -4,6 +4,7 @@ var express         = require('express'),
     app             = express(),
     bodyParser      = require('body-parser'),
     mongoose        = require('mongoose'),
+    flash           = require('connect-flash'),
     methodOverride  = require('method-override');
 
 // for user authentication & session
@@ -28,7 +29,7 @@ var seedDB = require("./seeds");
 // Strategy describes the data you will use for auth.(ex. fb, google+, local, twitter) for signUp & logIn. 
 
 
-mongoose.connect("mongodb://localhost/vab_camp_v8"/*, { useNewUrlParser: true }*/);
+mongoose.connect("mongodb://localhost/vab_camp_v12"/*, { useNewUrlParser: true }*/);
 
 // =================================
 // Setting up the express Environment
@@ -37,6 +38,7 @@ app.set("view engine", "ejs"); //what files to look for html data
 app.use(bodyParser.urlencoded({extended:true})); //true(complex Algo) for parsing all data types, false just for string/array
 app.use(express.static(__dirname + "/public"));//for describing where the static files are present.
 app.use(methodOverride("__method")); //for enabling PUT and DELETE methods.
+app.use(flash());
 
 
 // ======================
@@ -68,6 +70,8 @@ passport.deserializeUser(User.deserializeUser()); //.deserializeUser() -> pass-l
 
 app.use(function(req, res, next){
     res.locals.thisUser = req.user;
+    res.locals.error    = req.flash("error");
+    res.locals.success  = req.flash("success");
     next();
 });
 

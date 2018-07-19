@@ -16,7 +16,7 @@
                 <img class="img-responsive" src="<%=camp.image%>">
                 <div class="caption">
                     
-                    <h4 class="pull-right">900 Rs/Night</h4>
+                    <h4 class="pull-right">Rs.<%=camp.price%>/Night</h4>
                     <h4>
                         <a href="">
                             <%= camp.name %>
@@ -28,13 +28,14 @@
                         </em>
                     </p>
                     <p><%- camp.content %></p>
-                    <div>
-                        <a class="btn btn-warning" href="/campgrounds/<%= camp._id %>/edit">Edit</a>
-                        <form method="POST" action="/campgrounds/<%=camp._id%>?__method=DELETE">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-    
+                    <% if(thisUser && camp.author.id.equals(thisUser._id)){ %>
+                        <div>
+                            <a class="btn btn-warning" href="/campgrounds/<%= camp._id %>/edit">Edit</a>
+                            <form id="delete-form" method="POST" action="/campgrounds/<%=camp._id%>?__method=DELETE">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    <% } %>
                 </div>
             </div><!--Thumbnail ends-->
             
@@ -48,7 +49,19 @@
                 <div class="row">
                     <div class="col-12">
                         <% camp.comments.forEach(function(comment){ %>
-                            <strong class="userCase"><%= comment.author.username %></strong>
+                            <strong class="userCase" id="comment-author"><%= comment.author.username %></strong>
+                            
+                            <% if(thisUser && comment.author.id.equals(thisUser._id)){ %>
+                                    <a class="btn btn-xs btn-warning" href="/campgrounds/<%= camp._id %>/comments/<%= comment._id %>/edit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></a>
+                                    <form id="delete-form" method="POST" action="/campgrounds/<%=camp._id%>/comments/<%= comment._id %>?__method=DELETE">
+                                        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                    </form>
+                            <% } else if(thisUser && camp.author.id.equals(thisUser._id)){ %>
+                                    <form id="delete-form" method="POST" action="/campgrounds/<%=camp._id%>/comments/<%= comment._id %>?__method=DELETE">
+                                        <button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                    </form>
+                            <% } %>
+                            
                             <span class="pull-right">10 Days Ago</span>
                             <p><%= comment.text %></p>
                         <% }); %>

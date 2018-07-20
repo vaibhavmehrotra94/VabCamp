@@ -1,14 +1,15 @@
 <% include ../partials/head %>
 
-<div class ="container">
+<div class ="container" id="comment-padding">
     <div class="row">
         <div class="col col-md-3">
             <p class="lead">VabCamp</p>
             <div class="list-group">
-                <li class="list-group-item active">Cras justo odio 1</li>
-                <li class="list-group-item">Cras justo odio 2</li>
-                <li class="list-group-item">Cras justo odio 3</li>
+                <li class="list-group-item active">List Item(Demo) 1</li>
+                <li class="list-group-item">List Item(Demo) 2</li>
+                <li class="list-group-item">List Item(Demo) 3</li>
             </div>
+            <div id="map"></div>
         </div>
         <div class="col col-md-9">
             <!--Thumbnail-->
@@ -24,7 +25,7 @@
                     </h4>
                     <p>
                         <em>Submitted By - 
-                            <span class="text-capitalize"><%= camp.author.username %></span>
+                            <span class="text-capitalize"><%= camp.author.username %>, <%= moment(camp.createdAt).fromNow() %></span>
                         </em>
                     </p>
                     <p><%- camp.content %></p>
@@ -62,7 +63,7 @@
                                     </form>
                             <% } %>
                             
-                            <span class="pull-right">10 Days Ago</span>
+                            <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
                             <p><%= comment.text %></p>
                         <% }); %>
                     </div>
@@ -72,5 +73,37 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+  function initMap() {
+    var lat = <%= camp.lat %>;
+    var lng = <%= camp.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= camp.name %><br />
+      <%= camp.location %></strong>
+      <p><%= camp.content %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0Qh9rZLGz8lBM8XNYYdbRg5jhwVxSd00&callback=initMap"></script>
+
 
 <% include ../partials/foot %>

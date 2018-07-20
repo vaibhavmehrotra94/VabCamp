@@ -1,4 +1,6 @@
 "use strict";
+require('dotenv').config();
+
 // For general environment
 var express         = require('express'),
     app             = express(),
@@ -8,6 +10,7 @@ var express         = require('express'),
     methodOverride  = require('method-override');
 
 // for user authentication & session
+// Strategy describes the data you will use for auth.(ex. fb, google+, local, twitter) for signUp & logIn. 
 var passport                = require("passport"), //for saving and retrieving auth data using some strategy
     localStrategy           = require("passport-local"), //strategy that uses local data for auth i.e. username & pass.
     passportLocalMongoose   = require("passport-local-mongoose"), //plugging methods in schema to work with passport 
@@ -22,14 +25,10 @@ var CampGround  = require("./models/campground"),
 var campGroundRoute = require("./routes/campground"),
     commentRoute    = require("./routes/comment"),
     authRoute       = require("./routes/index");
-    
-// Including Seeds file 
-var seedDB = require("./seeds");
-    
-// Strategy describes the data you will use for auth.(ex. fb, google+, local, twitter) for signUp & logIn. 
 
-
-mongoose.connect("mongodb://localhost/vab_camp_v12"/*, { useNewUrlParser: true }*/);
+// localURL = mongodb://localhost/vab_camp_v12
+// HerokuURL = mongodb://maverick:maverick123@ds143971.mlab.com:43971/vabcamp
+mongoose.connect(process.env.databaseURL);
 
 // =================================
 // Setting up the express Environment
@@ -39,6 +38,8 @@ app.use(bodyParser.urlencoded({extended:true})); //true(complex Algo) for parsin
 app.use(express.static(__dirname + "/public"));//for describing where the static files are present.
 app.use(methodOverride("__method")); //for enabling PUT and DELETE methods.
 app.use(flash());
+// for using moment in all ejs files
+app.locals.moment = require('moment');
 
 
 // ======================
@@ -61,9 +62,6 @@ passport.use(new localStrategy(User.authenticate())); //.authenticate() is provi
 passport.serializeUser(User.serializeUser()); //.serializeUser() -> pass-loc-mongoose (for decoding)
 passport.deserializeUser(User.deserializeUser()); //.deserializeUser() -> pass-loc-mongoose (for encoding)
 
-// Seeding the DataBase
-// --------------------
-// seedDB();
 
 // MiddleWare for Passing thisUser to all Routes
 // ---------------------------------------------

@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/icon.ico">
         
         <title>VabCamp | Vaibhav Mehrotra</title>
         <!--<link rel="shortcut icon" href="icon.ico">-->
@@ -15,33 +16,34 @@
     </head>
     <body>
     
-    <div class="container">
-        <% if(error && error.length > 0){ %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-        <% } %>
-        <% if(success && success.length > 0){ %>
-            <div class="alert alert-success" role="alert">
-                <%= success %>
-            </div>
-        <% } %>
-    </div>
-    
-    <div id="landing-header">
- 		<h1>Welcome to VabCamp!</h1>
-		<a href="/campgrounds" class="btn btn-lg btn-success">View All Campgrounds</a>
-    </div>
-    
-    <ul class="slideshow">
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
-    
-<footer id="footer">    
-    <p class="text-center">A demo website | By- Vaibhav Mehrotra</p>
-</footer>
-<% include partials/foot %>
+        <div class="container">
+            <% if(error && error.length > 0){ %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+            <% } %>
+            <% if(success && success.length > 0){ %>
+                <div class="alert alert-success" role="alert">
+                    <%= success %>
+                </div>
+            <% } %>
+        </div>
+        
+        <div id="landing-header">
+     		<h1>Welcome to VabCamp!</h1>
+    		<a href="/campgrounds" class="btn btn-lg btn-success">Let's Go!</a>
+        </div>
+        
+        <ul class="slideshow">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+        
+        <footer id="footer">    
+            <p class="text-center">A demo website | By- Vaibhav Mehrotra</p>
+        </footer>
+    </body>
+</html>

@@ -63,5 +63,35 @@ middleWareObj.checkCommentOwnership = function (req, res, next){
 };
 
 
+// Function for deleting comment
+// -----------------------------
+middleWareObj.deleteComment = function (req, res, next){
+    if(req.isAuthenticated()){
+        res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+        CampGround.findById(req.params.id, function(err, camp){
+            if(err){
+                console.log(err);
+            }
+            Comment.findById(req.params.c_id, function(err, comment){
+                if(err || !comment){
+                    console.log(err);
+                    return res.redirect("back");
+                } else{
+                    if(comment.author.id.equals(req.user._id) || camp.author.id.equals(req.user._id)){
+                        next();
+                    }else{
+                        req.flash("error", "Sorry! You don't have permission to do that");
+                        res.redirect("back");
+                    }
+                }
+            });
+        });
+
+    }else{
+        req.flash("error", "Please Log In First !");
+        res.redirect("/login");
+    }
+};
+
 
 module.exports = middleWareObj;

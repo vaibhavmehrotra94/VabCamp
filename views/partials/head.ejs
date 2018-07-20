@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <title>VabCamp | Vaibhav Mehrotra</title>
-        <!--<link rel="shortcut icon" href="icon.ico">-->
+        <link rel="shortcut icon" href="/icon.ico">
         
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="/style/app.css">
@@ -15,15 +15,15 @@
     </head>
     <body>
         <% include navbar%>
-        
-        <% if(success && success.length > 0){ %>
-            <div class="alert alert-success container alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <%= success %>
-            </div>
-        <% } if(error && error.length > 0){%>
-            <div class="alert alert-danger container alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <%= error %>
-            </div>
-        <% } %>
+        <div class="container">
+            <% if(success && success.length > 0){ %>
+                <div class="alert alert-success container alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <%= success %>
+                </div>
+            <% } if(error && error.length > 0){%>
+                <div class="alert alert-danger container alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <%= error %>
+                </div>
+            <% } %>

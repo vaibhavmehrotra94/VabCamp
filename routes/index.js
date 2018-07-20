@@ -18,7 +18,7 @@ router.get("/",function(req, res) {
 // Show Registration Form
 // ----------------------
 router.get("/register", function(req, res){
-    res.render("auth/register");
+    res.render("auth/register", {page: "register"});
 });
 
 // Save Registration Form details
@@ -42,15 +42,28 @@ router.post("/register", function(req, res){
 // Show Login Form
 // ---------------
 router.get("/login", function(req, res){
-    res.render("auth/login");
+    res.render("auth/login", {page: "login"});
 });
 
 // handling login
 // --------------
 router.post("/login", passport.authenticate("local", {
-    successRedirect:    "/campgrounds",
-    failureRedirect:    "/login"
+    successRedirect: "/login/success",
+    failureRedirect: "/login/fail"
 }),function(req, res){
+});
+
+// for Displaying Login Success
+// ----------------------------
+router.get("/login/success", function(req,res){
+    req.flash("success", "Welcome! It's good to see you again.");
+    res.redirect("/campgrounds");
+});
+// for Displaying Login Failed
+// ----------------------------
+router.get("/login/fail", function(req,res){
+    req.flash("error", "Oops! Username/Password Invalid.");
+    res.redirect("/login");
 });
 
 

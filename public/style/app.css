@@ -1,6 +1,15 @@
-body{
-    min-height:100%;
+html {
+  position: relative;
+  min-height: 100%;
 }
+body{
+    margin-bottom: 60px;
+}
+
+.glyphicon{
+    vertical-align: text-bottom;
+}
+
 .thumbnail img{
     width : 100%;
 }
@@ -33,6 +42,30 @@ body{
     -webkit-appearance: none;
 }
 
+.container .text-muted {
+  margin: 20px 0;
+}
+
+.flex-wrap {
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+
+#map{
+    height: 400px;
+    width: 100%;
+}
+
 #delete-form{
     display: inline;
 }
@@ -44,4 +77,8 @@ body{
 
 #comment-author{
     margin-right: 10px;
+}
+
+#comment-padding, #pagination-padding{
+    padding-bottom: 50px;
 }

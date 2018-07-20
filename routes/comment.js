@@ -74,7 +74,7 @@ router.put("/:c_id", middleWare.checkCommentOwnership, function(req, res){
 
 // Deleting Comment
 // ----------------
-router.delete("/:c_id", middleWare.checkCommentOwnership, function(req, res){
+router.delete("/:c_id", middleWare.deleteComment, function(req, res){
     Comment.findByIdAndRemove(req.params.c_id, function(err){
         if(err){
             console.log(err);

@@ -1,6 +1,7 @@
 html {
   position: relative;
   min-height: 100%;
+
 }
 body{
     margin-bottom: 60px;
@@ -10,8 +11,12 @@ body{
     vertical-align: text-bottom;
 }
 
-.thumbnail img{
+#allCamps{
     width : 100%;
+    height: 28vh;
+    display: flex;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .thumbnail{

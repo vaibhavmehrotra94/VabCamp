@@ -28,7 +28,7 @@ var campGroundRoute = require("./routes/campground"),
 
 // localURL = mongodb://localhost/vab_camp_v12
 mongoose.connect(process.env.databaseURL/*,{ useNewUrlParser: true }*/);
-
+ 
 // =================================
 // Setting up the express Environment
 // ==================================

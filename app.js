@@ -27,7 +27,6 @@ var campGroundRoute = require("./routes/campground"),
     authRoute       = require("./routes/index");
 
 // localURL = mongodb://localhost/vab_camp_v12
-// HerokuURL = mongodb://maverick:maverick123@ds143971.mlab.com:43971/vabcamp
 mongoose.connect(process.env.databaseURL/*,{ useNewUrlParser: true }*/);
 
 // =================================
